@@ -1,0 +1,14 @@
+{
+  "name": "travel-guide-chatbot",
+  "version": "1.0.0",
+  "description": "A travel guide chatbot using the Gemini API.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  }
+}
