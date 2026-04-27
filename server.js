@@ -39,10 +39,7 @@ app.post("/api/chat", async (req, res) => {
           }
         ]
       }
-    ],
-    generationConfig: {
-      maxOutputTokens: 512
-    }
+    ]
   };
 
   try {
