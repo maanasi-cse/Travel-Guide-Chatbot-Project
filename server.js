@@ -14,6 +14,7 @@ app.use(express.static("public"));
 
 app.post("/api/chat", async (req, res) => {
   const userMessage = req.body.message;
+  const history = req.body.history || [];
 
   if (!apiKey) {
     return res.status(500).json({ error: "GEMINI_API_KEY is not configured in .env" });
@@ -21,6 +22,37 @@ app.post("/api/chat", async (req, res) => {
 
   if (!userMessage || typeof userMessage !== "string") {
     return res.status(400).json({ error: "Message is required" });
+  }
+
+  const formattedContents = [];
+  let lastRole = null;
+
+  for (const msg of history) {
+    const role = msg.sender === "bot" ? "model" : "user";
+    
+    // Gemini API requires the first message to be from "user"
+    if (formattedContents.length === 0 && role === "model") {
+      continue;
+    }
+
+    // Gemini API requires alternating roles
+    if (role === lastRole) {
+      formattedContents[formattedContents.length - 1].parts[0].text += "\n\n" + msg.text;
+    } else {
+      formattedContents.push({
+        role: role,
+        parts: [{ text: msg.text }]
+      });
+      lastRole = role;
+    }
+  }
+
+  // Fallback if formatting failed or history was empty
+  if (formattedContents.length === 0) {
+    formattedContents.push({
+      role: "user",
+      parts: [{ text: userMessage }]
+    });
   }
 
   const payload = {
@@ -31,15 +63,7 @@ app.post("/api/chat", async (req, res) => {
         }
       ]
     },
-    contents: [
-      {
-        parts: [
-          {
-            text: userMessage
-          }
-        ]
-      }
-    ]
+    contents: formattedContents
   };
 
   try {
