@@ -3,20 +3,39 @@ const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
 const typingIndicator = document.getElementById("typingIndicator");
 
-let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+let chatHistory = [];
+try {
+  const stored = localStorage.getItem("chatHistory");
+  if (stored) {
+    const parsed = JSON.parse(stored);
+    if (Array.isArray(parsed) && parsed.every(msg => msg && typeof msg.text === 'string' && typeof msg.sender === 'string')) {
+      chatHistory = parsed;
+    } else {
+      console.warn("Malformed chat history found. Resetting.");
+      localStorage.removeItem("chatHistory");
+    }
+  }
+} catch (e) {
+  console.error("Error parsing chat history:", e);
+  localStorage.removeItem("chatHistory");
+}
 
 const addMessage = (text, sender, save = true) => {
+  if (!text) return;
   const el = document.createElement("div");
   el.className = `message ${sender}`;
   
   if (sender === "bot") {
-    // Parse markdown if it's the bot
-    el.innerHTML = marked.parse(text);
+    try {
+      el.innerHTML = marked.parse(text);
+    } catch (e) {
+      console.error("Error parsing markdown:", e);
+      el.textContent = text;
+    }
   } else {
     el.textContent = text;
   }
   
-  // Insert before the typing indicator
   chatEl.insertBefore(el, typingIndicator);
   scrollToBottom();
 
@@ -27,16 +46,20 @@ const addMessage = (text, sender, save = true) => {
 };
 
 const initChat = () => {
-  if (chatHistory.length > 0) {
-    const existingMessages = chatEl.querySelectorAll('.message');
-    existingMessages.forEach(msg => msg.remove());
-    
-    chatHistory.forEach(msg => {
-      addMessage(msg.text, msg.sender, false);
-    });
-  } else {
-    chatHistory.push({ text: "Hello! I'm your travel guide. Where would you like to explore today? 🌍", sender: "bot" });
-    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  try {
+    if (chatHistory.length > 0) {
+      const existingMessages = chatEl.querySelectorAll('.message');
+      existingMessages.forEach(msg => msg.remove());
+      
+      chatHistory.forEach(msg => {
+        addMessage(msg.text, msg.sender, false);
+      });
+    } else {
+      chatHistory.push({ text: "Hello! I'm your travel guide. Where would you like to explore today? 🌍", sender: "bot" });
+      localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+    }
+  } catch (e) {
+    console.error("Error initializing chat:", e);
   }
 };
 

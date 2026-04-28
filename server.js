@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 const port = parseInt(process.env.PORT || "3000", 10);
 const apiKey = process.env.GEMINI_API_KEY;
-const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 app.use(express.json());
 app.use(express.static("public"));
