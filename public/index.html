@@ -139,9 +139,45 @@
     .message.bot ul { margin: 8px 0; padding-left: 20px; }
 
     .input-area {
-      padding: 20px;
+      padding: 16px 20px 20px;
       background: rgba(255, 255, 255, 0.8);
       border-top: 1px solid rgba(255, 115, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .quick-actions::-webkit-scrollbar {
+      display: none;
+    }
+
+    button.action-btn {
+      background: white;
+      color: var(--primary-dark);
+      border: 1px solid var(--primary);
+      border-radius: 16px;
+      width: auto;
+      height: auto;
+      padding: 6px 14px;
+      display: inline-block;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    button.action-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-1px);
     }
 
     .input-wrapper {
@@ -246,6 +282,14 @@
     </div>
 
     <div class="input-area">
+      <div class="quick-actions" id="quickActions">
+        <button class="action-btn">Flights</button>
+        <button class="action-btn">Hotels</button>
+        <button class="action-btn">Itinerary</button>
+        <button class="action-btn">Budget Tips</button>
+        <button class="action-btn">Best Places</button>
+        <button class="action-btn">Low-Cost Travel</button>
+      </div>
       <div class="input-wrapper">
         <input id="messageInput" type="text" placeholder="Ask about cities, flights, packing..." autocomplete="off" />
         <button id="sendButton" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>

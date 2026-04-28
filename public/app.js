@@ -3,7 +3,9 @@ const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
 const typingIndicator = document.getElementById("typingIndicator");
 
-const addMessage = (text, sender) => {
+let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+const addMessage = (text, sender, save = true) => {
   const el = document.createElement("div");
   el.className = `message ${sender}`;
   
@@ -17,7 +19,28 @@ const addMessage = (text, sender) => {
   // Insert before the typing indicator
   chatEl.insertBefore(el, typingIndicator);
   scrollToBottom();
+
+  if (save) {
+    chatHistory.push({ text, sender });
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }
 };
+
+const initChat = () => {
+  if (chatHistory.length > 0) {
+    const existingMessages = chatEl.querySelectorAll('.message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    chatHistory.forEach(msg => {
+      addMessage(msg.text, msg.sender, false);
+    });
+  } else {
+    chatHistory.push({ text: "Hello! I'm your travel guide. Where would you like to explore today? 🌍", sender: "bot" });
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }
+};
+
+initChat();
 
 const scrollToBottom = () => {
   chatEl.scrollTop = chatEl.scrollHeight;
@@ -69,4 +92,13 @@ messageInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     sendMessage();
   }
+});
+
+// Quick Action Buttons
+const quickActions = document.querySelectorAll(".action-btn");
+quickActions.forEach(btn => {
+  btn.addEventListener("click", () => {
+    messageInput.value = btn.textContent;
+    sendMessage();
+  });
 });
