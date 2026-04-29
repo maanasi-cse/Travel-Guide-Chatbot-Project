@@ -97,7 +97,11 @@ const sendMessage = async () => {
     const data = await response.json();
     hideTyping();
     if (data.error) {
-      addMessage(`${data.error}: ${data.details || ''}`, "bot");
+      let errorMessage = `${data.error}: ${data.details || ''}`;
+      if (data.details && data.details.includes('"code": 429')) {
+        errorMessage = "Oops! The chatbot has exceeded its API quota (free tier limit reached). Please try again tomorrow, or use a new Gemini API key.";
+      }
+      addMessage(errorMessage, "bot", false);
     } else {
       addMessage(data.reply || "No reply from server.", "bot");
     }
