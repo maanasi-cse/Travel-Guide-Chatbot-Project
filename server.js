@@ -1,13 +1,14 @@
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import Groq from "groq-sdk";
 
 dotenv.config();
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000", 10);
-const apiKey = process.env.GEMINI_API_KEY;
-const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+const apiKey = process.env.GROQ_API_KEY;
+const groq = new Groq({ apiKey: apiKey });
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -17,74 +18,56 @@ app.post("/api/chat", async (req, res) => {
   const history = req.body.history || [];
 
   if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY is not configured in .env" });
+    return res.status(500).json({ error: "GROQ_API_KEY is not configured in .env" });
   }
 
   if (!userMessage || typeof userMessage !== "string") {
     return res.status(400).json({ error: "Message is required" });
   }
 
-  const formattedContents = [];
-  let lastRole = null;
+  const systemInstruction = `You are a travel guide chatbot. Answer only travel-related questions. If the user asks anything outside travel, reply exactly: Ask questions related to Travel only.
+
+Additionally, you have the following calculation capabilities:
+1. Budget Optimization Engine: For daily budget breakdowns, suggest cheapest combinations (stay+food+transport). Compare budget vs luxury options. Logic: Total Budget = Stay + Food + Transport + Activities. Example: User has ₹5000 for 2 days. Allocate ₹1500 Stay, ₹1000 Food, ₹2000 Travel, ₹500 Activities.
+2. Cost Split Calculator: Split expenses among friends, even unequal contributions. Logic: Split = Total Expense / Number of People. Example: Trip cost ₹12000 for 4 people -> Each pays ₹3000.
+3. Travel Cost Estimator: Estimate fuel/cab cost. Logic: Fuel Cost = Distance / Mileage * Fuel Price. Example: Delhi to Jaipur, Distance 280km, Mileage 15km/l, Fuel ₹100/l -> Cost ₹1867.
+4. Time & Itinerary Optimizer: Suggest how many places fit in given time. Avoid unrealistic plans. Logic: Total Time = Travel Time + Visit Time. Example: 6 hours in Chandigarh -> 1.5 hr travel buffer, suggest 3-4 nearby places.
+5. Budget vs Experience Trade-off: Show what user sacrifices when saving money. Example: Save ₹2000 by bus instead of flight, but travel time increases by 10 hours.
+
+IMPORTANT CONSTRAINT: If any user provides input like '500 for 3 days in Manali including everything', you MUST state 'It is realistically not possible' and state the reasons why.`;
+
+  const formattedContents = [
+    { role: "system", content: systemInstruction }
+  ];
 
   for (const msg of history) {
-    const role = msg.sender === "bot" ? "model" : "user";
-    
-    // Gemini API requires the first message to be from "user"
-    if (formattedContents.length === 0 && role === "model") {
-      continue;
-    }
-
-    // Gemini API requires alternating roles
-    if (role === lastRole) {
-      formattedContents[formattedContents.length - 1].parts[0].text += "\n\n" + msg.text;
-    } else {
-      formattedContents.push({
-        role: role,
-        parts: [{ text: msg.text }]
-      });
-      lastRole = role;
-    }
+    const role = msg.sender === "bot" ? "assistant" : "user";
+    formattedContents.push({
+      role: role,
+      content: msg.text
+    });
   }
 
-  // Fallback if formatting failed or history was empty
-  if (formattedContents.length === 0) {
+  // Ensure current message is added if history didn't include it at the end
+  if (formattedContents.length === 1 || formattedContents[formattedContents.length - 1].content !== userMessage) {
     formattedContents.push({
       role: "user",
-      parts: [{ text: userMessage }]
+      content: userMessage
     });
   }
 
-  const payload = {
-    systemInstruction: {
-      parts: [
-        {
-          text: "You are a travel guide chatbot. Answer only travel-related questions. If the user asks anything outside travel, reply exactly: Ask questions related to Travel only."
-        }
-      ]
-    },
-    contents: formattedContents
-  };
-
   try {
-    const response = await fetch(`${apiUrl}${apiUrl.includes("?") ? "&" : "?"}key=${encodeURIComponent(apiKey)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+    const chatCompletion = await groq.chat.completions.create({
+      messages: formattedContents,
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 1024,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return res.status(response.status).json({ error: "Gemini API request failed", details: errorText });
-    }
-
-    const data = await response.json();
-    const message = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I could not generate a response.";
-
+    const message = chatCompletion.choices[0]?.message?.content || "Sorry, I could not generate a response.";
     res.json({ reply: message });
   } catch (error) {
+    console.error("Groq API error:", error);
     res.status(500).json({ error: "Request failed", details: error.message });
   }
 });
