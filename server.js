@@ -39,7 +39,10 @@ IMPORTANT CONSTRAINT: If any user provides input like '500 for 3 days in Manali 
     { role: "system", content: systemInstruction }
   ];
 
-  for (const msg of history) {
+  // Limit history to the last 6 messages to avoid exceeding the 6000 Tokens Per Minute limit
+  const recentHistory = history.slice(-6);
+
+  for (const msg of recentHistory) {
     const role = msg.sender === "bot" ? "assistant" : "user";
     formattedContents.push({
       role: role,
