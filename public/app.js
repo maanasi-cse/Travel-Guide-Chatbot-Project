@@ -129,3 +129,15 @@ quickActions.forEach(btn => {
     sendMessage();
   });
 });
+
+// Calculator Buttons
+const calcBtns = document.querySelectorAll(".calc-btn");
+calcBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const query = btn.getAttribute("data-query");
+    if (query) {
+      messageInput.value = query;
+      sendMessage();
+    }
+  });
+});
