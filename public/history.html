@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session History - Wanderlust</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --secondary: #ffedd5;
+      --text-main: #1f2937;
+      --text-light: #4b5563;
+      --bg-gradient: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      background-image: url('bg.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      padding: 20px;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 115, 0, 0.2);
+      backdrop-filter: blur(4px);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 800px;
+      height: 85vh;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.6);
+      border-bottom: 1px solid rgba(255, 115, 0, 0.1);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      color: var(--primary);
+    }
+
+    h1 {
+      font-family: 'Pacifico', cursive;
+      margin: 0;
+      font-size: 2rem;
+      color: var(--primary-dark);
+    }
+
+    .header-right {
+      width: 80px; /* To balance the header layout with back btn */
+    }
+
+    .history-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Hide scrollbar */
+    .history-content::-webkit-scrollbar { width: 6px; }
+    .history-content::-webkit-scrollbar-track { background: transparent; }
+    .history-content::-webkit-scrollbar-thumb { background: rgba(249, 115, 22, 0.3); border-radius: 10px; }
+
+    .message {
+      padding: 14px 18px;
+      border-radius: 20px;
+      max-width: 85%;
+      line-height: 1.5;
+      font-size: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .message.user {
+      background: var(--primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.bot {
+      background: white;
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      border: 1px solid rgba(249, 115, 22, 0.1);
+    }
+
+    .message.bot p { margin: 0 0 8px 0; }
+    .message.bot p:last-child { margin-bottom: 0; }
+    .message.bot strong { color: var(--primary-dark); }
+    .message.bot ul { margin: 8px 0; padding-left: 20px; }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-light);
+      margin-top: 50px;
+      font-size: 1.2rem;
+    }
+
+    .footer {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.6);
+      border-top: 1px solid rgba(255, 115, 0, 0.1);
+      text-align: center;
+    }
+
+    .clear-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    .clear-btn:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <header>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Chat</a>
+      <h1>Session History</h1>
+      <div class="header-right"></div>
+    </header>
+    
+    <div class="history-content" id="historyContent">
+      <!-- Messages will be injected here -->
+    </div>
+
+    <div class="footer">
+      <button id="clearHistoryBtn" class="clear-btn"><i class="fa-solid fa-trash"></i> Clear History</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="history.js"></script>
+</body>
+</html>

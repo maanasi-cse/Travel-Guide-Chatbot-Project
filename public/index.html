@@ -45,14 +45,95 @@
       z-index: 0;
     }
 
-    .container {
+    .app-wrapper {
       position: relative;
       z-index: 1;
       width: 100%;
-      min-width: 320px;
-      max-width: 600px;
-      flex-basis: 600px;
+      max-width: 900px;
       height: 85vh;
+      display: flex;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      font-family: 'Pacifico', cursive;
+      color: var(--primary-dark);
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 4px;
+      display: inline-block;
+    }
+
+    .calc-btn {
+      width: 100%;
+      background: white;
+      color: var(--primary-dark);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .calc-btn:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    #historyList {
+      display: none;
+    }
+
+    .history-link {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      background: var(--primary);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .history-link:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      flex: 1;
       display: flex;
       flex-direction: column;
       background: rgba(255, 255, 255, 0.85);
@@ -263,7 +344,24 @@
 </head>
 <body>
   <div class="overlay"></div>
-  <div class="container">
+  <div class="app-wrapper">
+    <aside class="sidebar">
+      <h2>Travel Tools</h2>
+      <div class="sidebar-section">
+        <h3>Calculators</h3>
+        <button class="calc-btn" data-query="Can you give me a budget optimization for a ₹5000 trip to Manali for 2 days?">Budget Optimization</button>
+        <button class="calc-btn" data-query="Trip cost ₹12,000 for 4 people, how do we split?">Cost Split Calculator</button>
+        <button class="calc-btn" data-query="Calculate travel cost for Delhi to Jaipur by car (Distance 280 km, Mileage 15 km/l, Fuel price ₹100/l)">Travel Cost Estimator</button>
+        <button class="calc-btn" data-query="I have 6 hours in Chandigarh, optimize my itinerary">Time & Itinerary Optimizer</button>
+        <button class="calc-btn" data-query="Should I save ₹2000 by choosing bus instead of flight for a 12 hour journey?">Budget vs Experience</button>
+        <button class="calc-btn" data-query="Can I travel to Manali for 3 days with a budget of ₹500 including everything?">Realistic Budget Check</button>
+      </div>
+      <div class="sidebar-section">
+        <h3>Session History</h3>
+        <a href="history.html" class="history-link"><i class="fa-solid fa-clock-rotate-left"></i> View Full History</a>
+      </div>
+    </aside>
+    <div class="container">
     <header>
       <h1>Wanderlust</h1>
       <p class="subtitle">Your personal travel companion <i class="fa-solid fa-plane-departure" style="color: var(--primary);"></i></p>
@@ -294,6 +392,7 @@
         <input id="messageInput" type="text" placeholder="Ask about cities, flights, packing..." autocomplete="off" />
         <button id="sendButton" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
+    </div>
     </div>
   </div>
 
