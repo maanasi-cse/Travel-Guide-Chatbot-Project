@@ -1,5 +1,4 @@
 import express from "express";
-import fetch from "node-fetch";
 import dotenv from "dotenv";
 import Groq from "groq-sdk";
 
@@ -59,7 +58,7 @@ IMPORTANT CONSTRAINT: If any user provides input like '500 for 3 days in Manali 
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: formattedContents,
-      model: "llama-3.3-70b-versatile",
+      model: "llama3-8b-8192",
       temperature: 0.7,
       max_tokens: 1024,
     });

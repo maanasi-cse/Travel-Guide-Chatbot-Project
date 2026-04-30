@@ -99,7 +99,7 @@ const sendMessage = async () => {
     if (data.error) {
       let errorMessage = `${data.error}: ${data.details || ''}`;
       if (data.details && data.details.includes('"code": 429')) {
-        errorMessage = "Oops! The chatbot has exceeded its API quota (free tier limit reached). Please try again tomorrow, or use a new Gemini API key.";
+        errorMessage = "Oops! The chatbot has exceeded its API quota (free tier limit reached). Please try again tomorrow, or use a new Groq API key.";
       }
       addMessage(errorMessage, "bot", false);
     } else {
