@@ -1,13 +1,13 @@
 # Travel Guide Chatbot
 
-A simple travel guide chatbot that uses the Gemini API to answer travel-related questions and rejects off-topic requests with the message:
+A simple travel guide chatbot that uses the Groq API to answer travel-related questions and rejects off-topic requests with the message:
 
 "Ask questions related to Travel only"
 
 ## Setup
 
 1. Copy `.env.example` to `.env`.
-2. Set your `GEMINI_API_KEY` and optionally update `GEMINI_API_URL` if needed.
+2. Set your `GROQ_API_KEY` and optionally update `GROQ_API_URL` if needed.
 3. Run:
 
 ```bash
