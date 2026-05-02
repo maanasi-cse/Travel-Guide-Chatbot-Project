@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wanderlust Travel Guide</title>
+  <title>WanderGo Travel Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
@@ -57,11 +57,11 @@
 
     .sidebar {
       width: 280px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -75,6 +75,7 @@
       margin-bottom: 20px;
       font-size: 1.8rem;
       text-align: center;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.8);
     }
 
     .sidebar-section {
@@ -83,7 +84,7 @@
 
     .sidebar-section h3 {
       font-size: 1.1rem;
-      color: var(--text-main);
+      color: white;
       margin-bottom: 12px;
       border-bottom: 2px solid var(--primary);
       padding-bottom: 4px;
@@ -92,9 +93,9 @@
 
     .calc-btn {
       width: 100%;
-      background: white;
-      color: var(--primary-dark);
-      border: 1px solid var(--primary);
+      background: transparent;
+      color: white;
+      border: 2px solid var(--primary);
       border-radius: 8px;
       padding: 10px;
       margin-bottom: 8px;
@@ -103,12 +104,23 @@
       font-family: inherit;
       font-size: 0.9rem;
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
     }
 
     .calc-btn:hover {
       background: var(--primary);
       color: white;
+      font-weight: bold;
       transform: translateY(-1px);
+    }
+    
+    .calc-btn i {
+      width: 20px;
+      text-align: center;
+      margin-right: 8px;
+      font-size: 1.05rem;
+      color: var(--primary);
     }
 
     #historyList {
@@ -129,6 +141,8 @@
 
     .history-link:hover {
       background: var(--primary-dark);
+      color: white;
+      font-weight: bold;
       transform: translateY(-1px);
     }
 
@@ -136,18 +150,18 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
       overflow: hidden;
     }
 
     header {
       padding: 24px;
-      background: rgba(255, 255, 255, 0.6);
-      border-bottom: 1px solid rgba(255, 115, 0, 0.1);
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 115, 0, 0.2);
       text-align: center;
     }
 
@@ -156,13 +170,13 @@
       margin: 0;
       font-size: 2.5rem;
       color: var(--primary-dark);
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.8);
     }
 
     p.subtitle {
       margin: 8px 0 0;
       font-size: 0.95rem;
-      color: var(--text-light);
+      color: white;
     }
 
     .chat {
@@ -221,8 +235,8 @@
 
     .input-area {
       padding: 16px 20px 20px;
-      background: rgba(255, 255, 255, 0.8);
-      border-top: 1px solid rgba(255, 115, 0, 0.1);
+      background: transparent;
+      border-top: 1px solid rgba(255, 115, 0, 0.2);
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -242,9 +256,9 @@
     }
 
     button.action-btn {
-      background: white;
-      color: var(--primary-dark);
-      border: 1px solid var(--primary);
+      background: transparent;
+      color: white;
+      border: 2px solid var(--primary);
       border-radius: 16px;
       width: auto;
       height: auto;
@@ -258,6 +272,7 @@
     button.action-btn:hover {
       background: var(--primary);
       color: white;
+      font-weight: bold;
       transform: translateY(-1px);
     }
 
@@ -347,15 +362,78 @@
   <div class="app-wrapper">
     <aside class="sidebar">
       <h2>Travel Tools</h2>
+      
+      <div class="sidebar-section">
+        <h3>Destinations</h3>
+        <button class="calc-btn" data-query="Can you help me explore some popular travel destinations?"><i class="fa-solid fa-earth-americas"></i> Explore Destinations</button>
+        <button class="calc-btn" data-query="I want to browse destinations by continent. Can you list them?"><i class="fa-solid fa-globe"></i> Browse by Continent</button>
+        <button class="calc-btn" data-query="What are some hidden gem destinations that are not too crowded?"><i class="fa-regular fa-gem"></i> Hidden Gems</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Accommodation</h3>
+        <button class="calc-btn" data-query="Can you recommend some top hotels and resorts for my trip?"><i class="fa-solid fa-hotel"></i> Hotels & Resorts</button>
+        <button class="calc-btn" data-query="I'm on a budget. Can you suggest some hostels and budget stays?"><i class="fa-solid fa-bed"></i> Hostels & Budget</button>
+        <button class="calc-btn" data-query="Can you help me find vacation rentals for my trip?"><i class="fa-solid fa-house"></i> Vacation Rentals</button>
+        <button class="calc-btn" data-query="I want a luxury escape. What are the most luxurious places to stay?"><i class="fa-solid fa-spa"></i> Luxury Escapes</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Food & Dining</h3>
+        <button class="calc-btn" data-query="What is the local cuisine like at my destination? Any must-try dishes?"><i class="fa-solid fa-utensils"></i> Local Cuisine</button>
+        <button class="calc-btn" data-query="Can you provide a restaurant guide for my trip?"><i class="fa-solid fa-wine-glass"></i> Restaurant Guide</button>
+        <button class="calc-btn" data-query="Where can I find the best street food at my destination?"><i class="fa-solid fa-burger"></i> Street Food</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Activities</h3>
+        <button class="calc-btn" data-query="What are the top attractions to visit?"><i class="fa-solid fa-camera"></i> Top Attractions</button>
+        <button class="calc-btn" data-query="What adventure sports are available here?"><i class="fa-solid fa-person-snowboarding"></i> Adventure Sports</button>
+        <button class="calc-btn" data-query="What is the nightlife like? Any recommendations?"><i class="fa-solid fa-moon"></i> Nightlife</button>
+        <button class="calc-btn" data-query="Can you suggest family-friendly activities?"><i class="fa-solid fa-child"></i> Family Activities</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Transport</h3>
+        <button class="calc-btn" data-query="I need a list of flights based on my destination and location. Please fetch and simulate data from Skyscanner and ask me for my origin and destination."><i class="fa-solid fa-plane"></i> Flights</button>
+        <button class="calc-btn" data-query="What is the best way of getting around the city?"><i class="fa-solid fa-train"></i> Getting Around</button>
+        <button class="calc-btn" data-query="Can you help me with car rentals?"><i class="fa-solid fa-car"></i> Car Rentals</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Trip Planning</h3>
+        <button class="calc-btn" data-query="Can you help me build a custom itinerary?"><i class="fa-solid fa-map-location-dot"></i> Itinerary Builder</button>
+        <button class="calc-btn" data-query="I need help planning my travel budget."><i class="fa-solid fa-wallet"></i> Budget Planner</button>
+        <button class="calc-btn" data-query="Can you help me create a packing list?"><i class="fa-solid fa-suitcase"></i> Packing Lists</button>
+        <button class="calc-btn" data-query="What are the visa and document requirements for my destination?"><i class="fa-solid fa-passport"></i> Visa & Documents</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Practical Info</h3>
+        <button class="calc-btn" data-query="What is the weather like and when is the best time to visit?"><i class="fa-solid fa-cloud-sun"></i> Weather & Best Time</button>
+        <button class="calc-btn" data-query="What are some safety tips for this destination?"><i class="fa-solid fa-shield-halved"></i> Safety & Tips</button>
+        <button class="calc-btn" data-query="Are there any health or vaccine requirements?"><i class="fa-solid fa-syringe"></i> Health & Vaccines</button>
+        <button class="calc-btn" data-query="What should I know about the local culture and customs?"><i class="fa-solid fa-hands-praying"></i> Culture & Customs</button>
+        <button class="calc-btn" data-query="What is the currency and how is the money situation?"><i class="fa-solid fa-money-bill"></i> Currency & Money</button>
+        <button class="calc-btn" data-query="Where are the best photography spots?"><i class="fa-solid fa-camera-retro"></i> Photography Spots</button>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Travel Style</h3>
+        <button class="calc-btn" data-query="I am a solo traveller. Can you recommend some hotels with pricing in luxury, budget, and reasonable categories?"><i class="fa-solid fa-person"></i> Solo Travel</button>
+        <button class="calc-btn" data-query="We are travelling as a group. Can you recommend some hotels with pricing in luxury, budget, and reasonable categories?"><i class="fa-solid fa-users"></i> Group Travel</button>
+        <button class="calc-btn" data-query="I am a digital nomad. Where are the best places to work from?"><i class="fa-solid fa-laptop"></i> Digital Nomad</button>
+      </div>
+
       <div class="sidebar-section">
         <h3>Calculators</h3>
-        <button class="calc-btn" data-query="Can you give me a budget optimization for a ₹5000 trip to Manali for 2 days?">Budget Optimization</button>
-        <button class="calc-btn" data-query="Trip cost ₹12,000 for 4 people, how do we split?">Cost Split Calculator</button>
-        <button class="calc-btn" data-query="Calculate travel cost for Delhi to Jaipur by car (Distance 280 km, Mileage 15 km/l, Fuel price ₹100/l)">Travel Cost Estimator</button>
-        <button class="calc-btn" data-query="I have 6 hours in Chandigarh, optimize my itinerary">Time & Itinerary Optimizer</button>
-        <button class="calc-btn" data-query="Should I save ₹2000 by choosing bus instead of flight for a 12 hour journey?">Budget vs Experience</button>
-        <button class="calc-btn" data-query="Can I travel to Manali for 3 days with a budget of ₹500 including everything?">Realistic Budget Check</button>
+        <button class="calc-btn" data-query="Can you give me a budget optimization for a ₹5000 trip to Manali for 2 days?"><i class="fa-solid fa-calculator"></i> Budget Optimization</button>
+        <button class="calc-btn" data-query="Trip cost ₹12,000 for 4 people, how do we split?"><i class="fa-solid fa-divide"></i> Cost Split Calculator</button>
+        <button class="calc-btn" data-query="Calculate travel cost for Delhi to Jaipur by car (Distance 280 km, Mileage 15 km/l, Fuel price ₹100/l)"><i class="fa-solid fa-gas-pump"></i> Travel Cost Estimator</button>
+        <button class="calc-btn" data-query="I have 6 hours in Chandigarh, optimize my itinerary"><i class="fa-solid fa-hourglass-half"></i> Time & Itinerary</button>
+        <button class="calc-btn" data-query="Should I save ₹2000 by choosing bus instead of flight for a 12 hour journey?"><i class="fa-solid fa-scale-balanced"></i> Budget vs Experience</button>
       </div>
+
       <div class="sidebar-section">
         <h3>Session History</h3>
         <a href="history.html" class="history-link"><i class="fa-solid fa-clock-rotate-left"></i> View Full History</a>
@@ -363,7 +441,7 @@
     </aside>
     <div class="container">
     <header>
-      <h1>Wanderlust</h1>
+      <h1>WanderGo</h1>
       <p class="subtitle">Your personal travel companion <i class="fa-solid fa-plane-departure" style="color: var(--primary);"></i></p>
     </header>
 
